@@ -46,6 +46,12 @@ export function setup() {
 
 			const text2: string = ' * FROM employees';
 			await app.workbench.sqlNotebook.waitForTypeInEditor(text2);
+
+			// check for code colorization
+			await app.workbench.sqlNotebook.waitForColorization('1', 'mtk5'); // SELECT
+			await app.workbench.sqlNotebook.waitForColorization('3', 'mtk13'); // *
+			await app.workbench.sqlNotebook.waitForColorization('5', 'mtk5'); // FROM
+			await app.workbench.sqlNotebook.waitForColorization('6', 'mtk1'); // employees
 		});
 
 		// Python Notebooks
