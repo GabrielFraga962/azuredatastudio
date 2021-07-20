@@ -31,11 +31,21 @@ export function setup() {
 		it('can perform basic code cell functionality', async function () {
 			const app = this.app as Application;
 			await app.workbench.sqlNotebook.newUntitledNotebook();
+			await app.workbench.sqlNotebook.notebookToolbar.waitForKernel('SQL');
 			await app.workbench.sqlNotebook.addCellFromPlaceholder('Code');
 			await app.workbench.sqlNotebook.waitForPlaceholderGone();
 
-			const sampleText: string = 'SELECT * FROM sys.tables';
-			await app.workbench.sqlNotebook.waitForTypeInEditor(sampleText);
+			const text1: string = 'SEL';
+			await app.workbench.sqlNotebook.waitForTypeInEditor(text1);
+			await app.code.dispatchKeybinding('ctrl+space bar');
+
+			// check for completion suggestions
+			await app.workbench.sqlNotebook.waitForSuggestionWidget();
+			await app.workbench.sqlNotebook.waitForSuggestionResult('SELECT');
+			await app.code.dispatchKeybinding('tab');
+
+			const text2: string = ' * FROM employees';
+			await app.workbench.sqlNotebook.waitForTypeInEditor(text2);
 		});
 
 		// Python Notebooks
